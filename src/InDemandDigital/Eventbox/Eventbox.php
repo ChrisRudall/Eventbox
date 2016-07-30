@@ -1,6 +1,7 @@
 <?php
-namespace InDemandDigital\IDDFramework;
-use \InDemandDigital\IDDFramework\Entities AS Ent;
+namespace InDemandDigital\Eventbox;
+use InDemandDigital\IDDFramework AS IDD;
+use InDemandDigital\IDDFramework\Entities AS Ent;
 
 class Eventbox{
     public $event;
