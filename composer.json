@@ -1,8 +1,11 @@
 {
-    "name": "InDemandDigital/IDDFramework",
+    "name": "InDemandDigital/Eventbox",
     "autoload": {
         "psr-0" : {
-            "InDemandDigital\\IDDFramework" : "src"
+            "InDemandDigital\\Eventbox" : "src"
         }
+    },
+    "require":{
+            "InDemandDigital/IDDFramework": "dev-master",
     }
 }
