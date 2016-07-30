@@ -1,0 +1,47 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "hash": "c1d3495a1b95f91eff1825ad30bb2b00",
+    "content-hash": "14ba7df797cf18877972e66cb61b0ace",
+    "packages": [
+        {
+            "name": "InDemandDigital/IDDFramework",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ChrisRudall/IDDFramework.git",
+                "reference": "8ed3aac884700ef8c6dfea3af025b92261e99b81"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ChrisRudall/IDDFramework/zipball/8ed3aac884700ef8c6dfea3af025b92261e99b81",
+                "reference": "8ed3aac884700ef8c6dfea3af025b92261e99b81",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "InDemandDigital\\IDDFramework": "src"
+                }
+            },
+            "support": {
+                "source": "https://github.com/ChrisRudall/IDDFramework/tree/master",
+                "issues": "https://github.com/ChrisRudall/IDDFramework/issues"
+            },
+            "time": "2016-07-30 17:00:54"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "indemanddigital/iddframework": 20
+    },
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}

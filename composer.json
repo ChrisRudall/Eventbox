@@ -1,11 +1,16 @@
 {
     "name": "InDemandDigital/Eventbox",
+    "repositories": [
+        {
+        "type": "vcs",
+        "url": "https://github.com/ChrisRudall/IDDFramework"
+    }],
     "autoload": {
         "psr-0" : {
             "InDemandDigital\\Eventbox" : "src"
         }
     },
     "require":{
-            "InDemandDigital/IDDFramework": "dev-master",
+            "InDemandDigital/IDDFramework": "dev-master"
     }
 }
