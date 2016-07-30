@@ -1,0 +1,8 @@
+{
+    "name": "InDemandDigital/IDDFramework",
+    "autoload": {
+        "psr-0" : {
+            "InDemandDigital\\IDDFramework" : "src"
+        }
+    }
+}
