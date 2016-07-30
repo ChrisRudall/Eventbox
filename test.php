@@ -1,24 +1,37 @@
-<?php namespace InDemandDigital;
+<?php namespace InDemandDigital\Eventbox;
 session_start();
 set_include_path('includes');
 Date_default_timezone_set('UTC');
+
+// check for local
+if($_SERVER['REMOTE_ADDR'] == "::1" || $_SERVER['REMOTE_ADDR'] == "127.0.0.1" || $_SERVER['HOME'] == "/Users/chrisrudall"){
+    $_SESSION['local'] = True;
+}else{
+    $_SESSION['local'] = False;
+}
 
 require 'vendor/autoload.php';
 
 use \InDemandDigital\IDDFramework\Entities AS Ent;
 use \InDemandDigital\IDDFramework AS IDD;
+use \InDemandDigital\IDDFramework\Tests\Debug AS Debug;
+
 
  ?>
 
  <!DOCTYPE HTML>
 <html>
 <head>
-
+<link rel="stylesheet" type="text/css" href="css/eventbox.css">
 </head>
 <body>
 <?php
-$eventbox = new IDD\Eventbox(8);
-var_dump($eventbox);
+Debug::$debug_level = 0;
+
+$eventbox = new Eventbox(8);
+$eventbox->roomlimit = 6;
+$eventbox->showtag = true;
+$eventbox->showRoomsInOneBox();
 ?>
 
     </body>

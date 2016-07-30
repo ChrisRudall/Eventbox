@@ -2,95 +2,154 @@
 namespace InDemandDigital\Eventbox;
 use InDemandDigital\IDDFramework AS IDD;
 use InDemandDigital\IDDFramework\Entities AS Ent;
+use InDemandDigital\IDDFramework\Tests\Debug AS Debug;
+
+
+//SET ARTIT SQL TO ONLY GET DISPLAY OVER ZERO - GETPERFORMANCESFORDISPLAY()
 
 class Eventbox{
     public $event;
+    public $artistlimit = 1000;
+    public $roomlimit = 1000;
+    public $offset = 0;
+    public $showtag = False;
 
     function __construct($eventid){
-        $this->$event = new Ent\Event($eventid);
+        IDD\Database::connect();
+        $this->event = new Ent\Event($eventid);
     }
 
-    public function echoEventName(){
+    function showSingleRoom($id = NULL){
+
     }
 
-}
-
-
-
-
-function getNiceDate($datestring){
-    if($GLOBALS["showdate"] == "false"){
-        return "";
+    function showRoomsInOneBox(){
+        $this->rooms = $this->event->getAllFutureRooms($this->roomlimit);
+        $this->makeDatesPretty($this->rooms);
+        $this->renderRoomsInOneBox();
     }
-    $date = date_create($datestring);
-    return date_format($date,"d/m/y");
-}
+
+    function showRoomsInMultipleBoxes(){
+
+    }
 
 
 
+    private function renderRoomsInOneBox(){
+        //set image to headliner pic
+        $performances = $this->rooms[0]->getPerformancesByDisplayOrder(1);
+        if ($performances[0]->artist->img1){
+            $image = "https://portal.indemandmusic.com/assets/images/profile_images/" . $performances[0]->artist->img1;
+           }
+        else
+            {$image = "http://www1.theladbible.com/images/content/53959ef6501b3.jpg";
+        }
+        echo "<div class='eventblock colcount1'><div class='image-container'><img class='eventblockimage' src='$image'></div>";
+        echo "<div class='textinfo'>";
+        foreach ($this->rooms as $room){
+            echo "<div class='eventblockname'><span class='fadedtext'>$room->prettydate</span> $room->name ";
+            echo "<div class='tag'>";
+            if($this->showtag == True){
+                // $artists = getArtistNames($room['id']);
+                $performances = $room->getPerformancesByDisplayOrder($this->artistlimit);
+                foreach ($performances as $performance){
+                    echo "<span> / ".$performance->artist->name."</span>";
+                }
+            }
+            echo "</div></div>";
 
-function getArtistNames($roomid){
-    $sql = "SELECT name,tagline,display_order,performances.id,img1 FROM performances,artists WHERE room_id='$roomid' AND performances.artist_id=artists.id AND display_order>0 ORDER BY display_order";
-    $rs=$GLOBALS["conn"]->query($sql);
-    $artists = $rs->fetch_all(MYSQLI_ASSOC);
-    return $artists;
-}
+            }
+            echo "</div></div>";
+    }
 
 
+    private function getNiceDate($datestring){
+        if($GLOBALS["showdate"] == "false"){
+            return "";
+        }
+        $date = date_create($datestring);
+        return date_format($date,"d/m/y");
+    }
 
-
-
-
-function renderEvent($id,$artistlimit,$roomlimit,$displaytype) {
-    $sql = "SELECT * FROM rooms WHERE event='$id' AND `start_time`>NOW() ORDER BY start_time";
-    $rs=$GLOBALS['conn']->query($sql);
-    $rooms = $rs->fetch_all(MYSQLI_ASSOC);
-    $c = 0;
-    if ($displaytype == 'eventblock'){
-        renderEventBlock($id,$roomlimit,$artistlimit,$rooms);
-    }else{
-    foreach ($rooms as $room){
-        if($c >= $roomlimit){break;}
-        $roomid = $room["id"];
-        renderRoom($roomid,$artistlimit,$displaytype);
-
-        $c = $c +1;
+    private function makeDatesPretty($rooms){
+        foreach ($rooms as $room) {
+            $room->prettydate = self::getNiceDate($room->start_time);
         }
     }
+
+
 }
 
 
-function renderRoom ($id,$artistlimit,$displaytype){
-    $sql = "SELECT name,start_time FROM rooms WHERE id='$id'";
-    // echo $sql;
-    $rs=$GLOBALS['conn']->query($sql);
-    $room = $rs->fetch_all(MYSQLI_ASSOC);
-    $roomname = $room[0]['name'];
-    $nicedate = getNiceDate($room[0]['start_time']);
-    $artists = getArtistNames($id);
-    if ($artistlimit > count($artists)){
-        $artistlimit = count($artists);
-    }
-    if (!$displaytype){
-        $displaytype = "roomblock";
-    }
-    $columns = $GLOBALS["columns"];
-    // display types
-    // artistblock - each atist with pic
-    // roomblock - each room with listing, and pic of main artist
-    // eventblock - each event(venue) as a block with roomname & headliner
-    switch ($displaytype) {
-        case 'artistblock':
-            renderArtistBlock($artistlimit,$artists,$columns,$roomname,$nicedate);
-            break;
-        case 'roomblock':
-            renderRoomBlock($artistlimit,$artists,$columns,$roomname,$nicedate);
-            break;
-        default:
-            renderRoomBlock($artistlimit,$artists,$columns,$roomname,$nicedate);
-            break;
-    }
-}
+
+
+
+
+
+
+
+// function getArtistNames($roomid){
+//     $sql = "SELECT name,tagline,display_order,performances.id,img1 FROM performances,artists WHERE room_id='$roomid' AND performances.artist_id=artists.id AND display_order>0 ORDER BY display_order";
+//     $rs=$GLOBALS["conn"]->query($sql);
+//     $artists = $rs->fetch_all(MYSQLI_ASSOC);
+//     return $artists;
+// }
+
+
+
+
+
+
+// function renderEvent($id,$artistlimit,$roomlimit,$displaytype) {
+//     $sql = "SELECT * FROM rooms WHERE event='$id' AND `start_time`>NOW() ORDER BY start_time";
+//     $rs=$GLOBALS['conn']->query($sql);
+//     $rooms = $rs->fetch_all(MYSQLI_ASSOC);
+//     $c = 0;
+//     if ($displaytype == 'eventblock'){
+//         renderEventBlock($id,$roomlimit,$artistlimit,$rooms);
+//     }else{
+//     foreach ($rooms as $room){
+//         if($c >= $roomlimit){break;}
+//         $roomid = $room["id"];
+//         renderRoom($roomid,$artistlimit,$displaytype);
+//
+//         $c = $c +1;
+//         }
+//     }
+// }
+
+
+// function renderRoom ($id,$artistlimit,$displaytype){
+//     $sql = "SELECT name,start_time FROM rooms WHERE id='$id'";
+//     // echo $sql;
+//     $rs=$GLOBALS['conn']->query($sql);
+//     $room = $rs->fetch_all(MYSQLI_ASSOC);
+//     $roomname = $room[0]['name'];
+//     $nicedate = getNiceDate($room[0]['start_time']);
+//     $artists = getArtistNames($id);
+//     if ($artistlimit > count($artists)){
+//         $artistlimit = count($artists);
+//     }
+//     if (!$displaytype){
+//         $displaytype = "roomblock";
+//     }
+//     $columns = $GLOBALS["columns"];
+//     // display types
+//     // artistblock - each atist with pic
+//     // roomblock - each room with listing, and pic of main artist
+//     // eventblock - each event(venue) as a block with roomname & headliner
+//     switch ($displaytype) {
+//         case 'artistblock':
+//             renderArtistBlock($artistlimit,$artists,$columns,$roomname,$nicedate);
+//             break;
+//         case 'roomblock':
+//             renderRoomBlock($artistlimit,$artists,$columns,$roomname,$nicedate);
+//             break;
+//         default:
+//             renderRoomBlock($artistlimit,$artists,$columns,$roomname,$nicedate);
+//             break;
+//     }
+// }
 function renderArtistBlock($artistlimit,$artists,$columns,$roomname,$nicedate){
     echo "<div class='roomtitle'>$roomname</div>";
     echo "<div class='roomdate'>$nicedate</div>";
@@ -129,34 +188,7 @@ function renderRoomBlock($limit,$artists,$columns,$roomname,$nicedate){
     }
     echo "</div>";
 }
-function renderEventBlock($id,$roomlimit,$artistlimit,$rooms){
-    $artists = getArtistNames($rooms[0]['id']);
-    //set image to headliner pic
-    if ($artists[0]["img1"]){
-        $image = "https://portal.indemandmusic.com/assets/images/profile_images/" . $artists[0]["img1"];
-       }
-    else
-        {$image = "http://www1.theladbible.com/images/content/53959ef6501b3.jpg";
-    }
-    echo "<div class='eventblock colcount1'><div class='image-container'><img class='eventblockimage' src='$image'></div>";
-    $c = 0;
-    foreach ($rooms as $room){
-        if($c >= $roomlimit){break;}
-        $roomid = $room["id"];
-        $roomname = $room['name'];
-        $nicedate = getNiceDate($room['start_time']);
-        echo "<div class='eventblockname' style='bottom:".$GLOBALS['textoffset']."px;'><span class='fadedtext'>$nicedate</span> $roomname";
-        if($GLOBALS['showtag'] == true){
-            $artists = getArtistNames($room['id']);
-            for ($i=0;$i<$artistlimit;$i++){
-                echo "<span class='tag'> / ".$artists[$i]['name']."</span>";
-            }
-        }
-        echo "</div>";
-        $c = $c +1;
-        }
-        echo "</div>";
-}
+
 
 function printTag($artist){
     $tag =$artist["tagline"];

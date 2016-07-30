@@ -1,7 +1,7 @@
 body{
     font-family: sans-serif;
 }
-.colcount1{
+/*.colcount1{
     width:100%;
 }
 .colcount2{
@@ -15,8 +15,8 @@ body{
 }
 .colcount5{
     width:20%;
-}
-@media
+}*/
+/*@media
 (max-width:820px)
 {
 .colcount4,.colcount5{
@@ -36,17 +36,17 @@ body{
 .colcount2,.colcount3,.colcount4,.colcount5{
         width:100%;
     }
-}
+}*/
 .artistblock,.roomblock,.eventblock {
 	display:inline-block;
-	min-width:200px;
-    height:400px;
+	/*min-width:200px;*/
+    /*height:400px;*/
 	padding:0px;
 	margin:0px;
-
+width: 100%;
 	position:relative;
     top: 0px;
-    white-space: nowrap;
+    /*white-space: nowrap;*/
     overflow: hidden;
 }
 
@@ -60,7 +60,7 @@ body{
 	height:300px;
 /*height: auto;*/
     padding: 0px;
-    margin:-20px -20px -20px -0px;
+    /*margin:-20px -20px -20px -0px;*/
     object-fit: cover;
     display: inline-block;
 
@@ -75,9 +75,19 @@ body{
 	text-align:left;
 	background-color:rgba(0, 0, 0, 0.7);
 	padding:2px 5px 2px 5px;
-	max-width:100%;
-position: relative;
+	width:100%;
+
    z-index: 100;
+
+}
+.textinfo{
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+}
+.tag{
+    white-space: nowrap;
+    display: inline-block;
 }
 .eventblocktitle,.roomblocktitle{
     font-size: 1.2em;
